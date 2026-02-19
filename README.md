@@ -66,7 +66,7 @@ flutter test
 
 - Auth: signup/login/logout with access + refresh token persistence
 - Onboarding: genres/languages/moods preferences
-- Home discovery: trending, under 90, nollywood, because-you-watched
+- Home discovery: marketing banners + trending, under 90, nollywood, because-you-watched
 - Search + filters, empty state request flow
 - Movie details + trailer + watchlist toggle
 - Subscription screens: plans/start/cancel/status (mock-provider ready)

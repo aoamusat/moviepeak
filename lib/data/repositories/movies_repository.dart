@@ -1,4 +1,5 @@
 import '../../core/network/api_client.dart';
+import '../models/marketing_banner.dart';
 import '../models/movie.dart';
 import '../models/paged_result.dart';
 import '../models/playback_session.dart';
@@ -125,5 +126,33 @@ class MoviesRepository {
     }
 
     return PlaybackSession.fromJson(payload);
+  }
+
+  Future<List<MarketingBanner>> getMarketingBanners({
+    String placement = 'mobile_home',
+    int limit = 6,
+  }) async {
+    final payload = await _apiClient.get(
+      '/marketing/banners',
+      queryParameters: {
+        'placement': placement,
+        'limit': limit,
+      },
+      skipAuth: true,
+    );
+
+    if (payload is! Map<String, dynamic>) {
+      return <MarketingBanner>[];
+    }
+
+    final items = payload['items'];
+    if (items is! List) {
+      return <MarketingBanner>[];
+    }
+
+    return items
+        .whereType<Map<String, dynamic>>()
+        .map(MarketingBanner.fromJson)
+        .toList(growable: false);
   }
 }

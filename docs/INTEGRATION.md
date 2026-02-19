@@ -31,6 +31,7 @@ Base URL prefix expected by app:
 - `lib/features/home/screens/home_screen.dart`
 
 ### Endpoints
+- `GET /marketing/banners?placement=mobile_home&limit=6`
 - `GET /discovery/trending`
 - `GET /discovery/under-90`
 - `GET /discovery/nollywood`

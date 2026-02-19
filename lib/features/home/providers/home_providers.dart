@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
+import '../../../data/models/marketing_banner.dart';
 import '../../../data/models/movie.dart';
 
 class DiscoveryBucket {
@@ -39,4 +40,12 @@ final nollywoodMoviesProvider = FutureProvider<List<Movie>>((ref) {
 
 final becauseWatchedMoviesProvider = FutureProvider<List<Movie>>((ref) {
   return ref.watch(discoveryBucketProvider(becauseWatchedBucket.slug).future);
+});
+
+final marketingBannersProvider =
+    FutureProvider<List<MarketingBanner>>((ref) async {
+  return ref.watch(moviesRepositoryProvider).getMarketingBanners(
+        placement: 'mobile_home',
+        limit: 6,
+      );
 });

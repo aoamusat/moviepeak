@@ -3,9 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../app/providers.dart';
 import '../../../core/constants/app_colors.dart';
+import '../../../core/widgets/empty_state.dart';
+import '../../../data/models/marketing_banner.dart';
 import '../../../data/models/movie.dart';
 import '../../movie_details/screens/movie_details_screen.dart';
 import '../providers/home_providers.dart';
+import '../widgets/banner_carousel.dart';
 import '../widgets/discovery_section.dart';
 
 class HomeScreen extends ConsumerWidget {
@@ -17,6 +20,7 @@ class HomeScreen extends ConsumerWidget {
     final under90 = ref.watch(under90MoviesProvider);
     final nollywood = ref.watch(nollywoodMoviesProvider);
     final becauseWatched = ref.watch(becauseWatchedMoviesProvider);
+    final banners = ref.watch(marketingBannersProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -29,11 +33,13 @@ class HomeScreen extends ConsumerWidget {
           ref.invalidate(under90MoviesProvider);
           ref.invalidate(nollywoodMoviesProvider);
           ref.invalidate(becauseWatchedMoviesProvider);
+          ref.invalidate(marketingBannersProvider);
           await Future.wait([
             ref.read(trendingMoviesProvider.future),
             ref.read(under90MoviesProvider.future),
             ref.read(nollywoodMoviesProvider.future),
             ref.read(becauseWatchedMoviesProvider.future),
+            ref.read(marketingBannersProvider.future),
           ]);
         },
         child: ListView(
@@ -65,6 +71,18 @@ class HomeScreen extends ConsumerWidget {
                         ?.copyWith(color: AppColors.muted),
                   ),
                 ],
+              ),
+            ),
+            const SizedBox(height: 20),
+            banners.when(
+              loading: () => const _BannerLoadingState(),
+              error: (_, __) => const EmptyState(
+                title: 'Could not load latest banners',
+                subtitle: 'You can still browse discovery sections below.',
+              ),
+              data: (items) => BannerCarousel(
+                banners: items,
+                onBannerTap: (banner) => _openBanner(context, ref, banner),
               ),
             ),
             const SizedBox(height: 20),
@@ -105,10 +123,55 @@ class HomeScreen extends ConsumerWidget {
     );
   }
 
+  Future<void> _openBanner(
+    BuildContext context,
+    WidgetRef ref,
+    MarketingBanner banner,
+  ) async {
+    final movieId = banner.movieId;
+    if (movieId == null || movieId.isEmpty) {
+      return;
+    }
+
+    try {
+      final movie = await ref.read(moviesRepositoryProvider).getMovie(movieId);
+      if (!context.mounted) {
+        return;
+      }
+      _openMovie(context, movie);
+    } catch (error) {
+      if (!context.mounted) {
+        return;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            content: Text(error.toString().replaceFirst('Exception: ', ''))),
+      );
+    }
+  }
+
   void _openMovie(BuildContext context, Movie movie) {
     Navigator.of(context).push(
       MaterialPageRoute(
           builder: (_) => MovieDetailsScreen(initialMovie: movie)),
+    );
+  }
+}
+
+class _BannerLoadingState extends StatelessWidget {
+  const _BannerLoadingState();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 200,
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: AppColors.border),
+      ),
+      child: const Center(child: CircularProgressIndicator()),
     );
   }
 }
