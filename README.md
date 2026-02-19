@@ -1,39 +1,80 @@
-# Movies App made in Flutter with api data from TMDB
+# MoviePeak Mobile MVP
 
-This is an app that displays you details of movies that you can search for or browse.<br>
+Flutter mobile customization of the existing template into **MoviePeak**, a discovery-first streaming app for Nigeria.
 
-## Features :
+## Stack
 
-<ul>
-<li>Fetch api data from TMDB asynchronously.</li>
-<li>Dynamic Theming using Provider</li>
-<li>Search Functionality</li>
+- Flutter + Dart 3
+- State management: `flutter_riverpod`
+- Networking: `dio`
+- Token storage: `flutter_secure_storage`
+- Fonts: `google_fonts` (Manrope)
+- Playback: `chewie` + `video_player` (HLS compatible)
 
-</ul>
-Video Demo: https://youtu.be/5_bDIUYLWzg <br><br>
-<a href ="https://play.google.com/store/apps/details?id=com.bimsina.movies"><img src ="https://play.google.com/intl/en/badges/images/generic/en_badge_web_generic.png"></a>
-Screenshots:<br>
-<table style={border:"none"}><tr>
-<td><img src="https://user-images.githubusercontent.com/29589003/58170605-93aba280-7cb3-11e9-8733-dff46d1e86c7.png" alt="Screenshot 2"/></td>
-<td><img src="https://user-images.githubusercontent.com/29589003/58170608-93aba280-7cb3-11e9-933f-395501d7a5a0.png" alt="Screenshot 1"/></td>
-<td><img src="https://user-images.githubusercontent.com/29589003/58170610-94443900-7cb3-11e9-946f-79587eaa1043.png" alt="Screenshot 3"/></td>
+## Project Structure
 
-</tr>
-<tr>
-<td><img src="https://user-images.githubusercontent.com/29589003/58170611-94443900-7cb3-11e9-8f01-ce5fe83bb93e.png" alt="Screenshot 1"/></td>
+```text
+lib/
+  app/
+  core/
+    config/ constants/ network/ storage/ theme/ widgets/
+  data/
+    models/ repositories/
+  features/
+    auth/
+    onboarding/
+    home/
+    search/
+    movie_details/
+    playback/
+    profile/
+    requests/
+    subscriptions/
+    watch_history/
+```
 
-<td><img src="https://user-images.githubusercontent.com/29589003/58170612-94dccf80-7cb3-11e9-8955-ce6bba8b36dd.png" alt="Screenshot 2"/></td>
-<td><img src="https://user-images.githubusercontent.com/29589003/58170613-94dccf80-7cb3-11e9-9182-a08922ae7139.png" alt="Screenshot 3"/></td>
+## API Base URL
 
-</tr>
+Uses `.env` via `flutter_dotenv`.
 
-</table>
+1. Copy the example:
+```bash
+cp .env.example .env
+```
+2. Update:
+```env
+API_BASE_URL=http://10.0.2.2:3000/api/v1
+```
 
-## To run this app
+For real devices, replace `10.0.2.2` with a reachable backend host.
 
-<ol>
-<li>Obtain api key from <a href ="https://www.themoviedb.org/">TMDB</a>.</li>
-<li>Replace YOUR_API_KEY in api_constants.dart with your api key.</li>
-<li>Run the app with <b>flutter run --release</b></li>
+## Run
 
-</ol>
+```bash
+flutter pub get
+flutter run
+```
+
+## Test & Analyze
+
+```bash
+flutter analyze
+flutter test
+```
+
+## Implemented MVP Flows
+
+- Auth: signup/login/logout with access + refresh token persistence
+- Onboarding: genres/languages/moods preferences
+- Home discovery: trending, under 90, nollywood, because-you-watched
+- Search + filters, empty state request flow
+- Movie details + trailer + watchlist toggle
+- Subscription screens: plans/start/cancel/status (mock-provider ready)
+- Playback authorization + HLS playback + progress sync every 10s
+- Requests: create + top requests
+- Profile: edit info/preferences, watch history, logout
+
+## Docs
+
+- Branding changes: `BRANDING.md`
+- Screen-to-endpoint integration map: `docs/INTEGRATION.md`

@@ -1,35 +1,35 @@
-name: movies
-description: A new Flutter application.
-
+name: moviepeak_mobile
+description: MoviePeak streaming MVP mobile app.
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: 1.0.8
-  http: 1.4.0
-  carousel_slider: 5.0.0
-  shared_preferences: 2.5.3
-  provider: 6.1.5
+  cupertino_icons: ^1.0.8
+  flutter_riverpod: ^2.6.1
+  dio: ^5.9.0
+  flutter_secure_storage: ^9.2.4
+  google_fonts: ^6.3.1
+  flutter_dotenv: ^5.2.1
+  chewie: ^1.13.0
+  video_player: ^2.10.0
+  url_launcher: ^6.3.2
+  intl: ^0.20.2
+  equatable: ^2.0.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^5.0.0
+  mocktail: ^1.0.4
 
 flutter:
   uses-material-design: true
-
   assets:
+    - .env
     - assets/images/
-
-  fonts:
-    - family: Sans
-      fonts:
-        - asset: assets/fonts/ProductSans-Regular.ttf
-        - asset: assets/fonts/ProductSans-Italic.ttf
-          style: italic
-        - asset: assets/fonts/ProductSans-Bold.ttf
-          weight: 700
+    - assets/icons/
